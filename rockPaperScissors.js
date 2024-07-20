@@ -1,78 +1,94 @@
-const prompt = require('prompt-sync')({ sigint: true });
+console.log("TEST TEST TEST");
+console.log("-".repeat(30));
 
 let playerScore = 0;
 let computerScore = 0;
-let gameCount = 0;
+let gameCount = 1;
 
-function getHumanChoice() {
-    let playerSelection;
-    while (true) {
-        playerSelection = prompt(`\nRound: ${gameCount + 1} / 5\nCurrent Score - PC: ${computerScore} - You: ${playerScore}\nWelcome to Rock, Paper, Scissors! Please enter a value.\n1: Rock\n2: Paper\n3: Scissors\n4: Exit\nYour choice: `);
-        console.log(`Player selected: ${playerSelection}`); // Debugging output
+// Function to handle button clicks
+function onButtonClick(event) {
+  const buttonId = event.target.id;
+  let playerSelect;
 
-        if (["1", "2", "3", "4"].includes(playerSelection)) {
-            break;
-        } else {
-            console.log("Invalid selection made, prompting again.");
-        }
-    }
-
-    switch (playerSelection) {
-        case "1":
-            return "Rock";
-        case "2":
-            return "Paper";
-        case "3":
-            return "Scissors";
-        case "4":
-            console.log("Exiting game!");
-            return null;
-        default:
-            return null;
-    }
+  if (buttonId === "rockBtn") {
+    playerSelect = "Rock";
+    ++gameCount;
+  } else if (buttonId === "paperBtn") {
+    playerSelect = "Paper";
+    ++gameCount;
+  } else if (buttonId === "scissorsBtn") {
+    playerSelect = "Scissors";
+    ++gameCount;
+  } else if (buttonId === "Exit") {
+    return;
+  }
+  console.clear();
+  console.log(`The current round is: ${gameCount}`);
+  return gameLogic(playerSelect, getComputerChoice());
 }
 
 function getComputerChoice() {
-    const pcChoices = ["Rock", "Paper", "Scissors"];
-    const intGrab = Math.floor(Math.random() * pcChoices.length);
-    console.log(`Computer selected: ${pcChoices[intGrab]}`); // Debugging output
-    return pcChoices[intGrab];
+  const pcChoices = ["Rock", "Paper", "Scissors"];
+  const intGrab = Math.floor(Math.random() * pcChoices.length);
+  return pcChoices[intGrab];
 }
 
 function gameLogic(playerChoice, computerChoice) {
-    console.log(`You play ${playerChoice}`);
-    console.log(`The computer plays ${computerChoice}`);
-    if (playerChoice === computerChoice) {
-        console.log("It's a tie!");
-    } else if ((computerChoice === "Rock" && playerChoice === "Scissors") ||
-               (computerChoice === "Paper" && playerChoice === "Rock") ||
-               (computerChoice === "Scissors" && playerChoice === "Paper")) {
-        computerScore++;
-        console.log("The computer wins this round!");
-    } else {
-        playerScore++;
-        console.log("You win this round!");
-    }
-    console.log(`The current score is PC: ${computerScore} - You: ${playerScore}`);
+  console.log(`You play ${playerChoice}`);
+  console.log(`The computer plays ${computerChoice}`);
+
+  let result;
+
+  if (playerChoice === computerChoice) {
+    result = "It's a tie!";
+  } else if (
+    (computerChoice === "Rock" && playerChoice === "Scissors") ||
+    (computerChoice === "Paper" && playerChoice === "Rock") ||
+    (computerChoice === "Scissors" && playerChoice === "Paper")
+  ) {
+    computerScore++;
+    result = "The computer wins this round!";
+    gameEndCheck();
+  } else {
+    playerScore++;
+    result = "You win this round!";
+    gameEndCheck();
+  }
+  console.log(result);
+  console.log(
+    `The current score is PC: ${computerScore} - You: ${playerScore}`,
+  );
 }
 
-function playGame() {
-    console.log("Starting game..."); // Initial debug statement
-    for (gameCount = 0; gameCount < 5; gameCount++) {
-        const playerChoice = getHumanChoice();
-        if (playerChoice === null) {
-            console.log("Game exited by user."); // Debugging output
-            return;
-        }
-        const computerChoice = getComputerChoice();
-        console.clear();
-        console.log(`Round: ${gameCount + 1} / 5`);
-        gameLogic(playerChoice, computerChoice);
-        console.log(`End of round ${gameCount + 1}`); // Debugging output
-    }
-    console.clear();
-    console.log("Game Over!");
-    console.log(`Final Score - PC: ${computerScore} - You: ${playerScore}`);
+// Adding event listeners to buttons
+document.getElementById("rockBtn").addEventListener("click", onButtonClick);
+document.getElementById("paperBtn").addEventListener("click", onButtonClick);
+document.getElementById("scissorsBtn").addEventListener("click", onButtonClick);
+if (document.getElementById("Exit")) {
+  document.getElementById("Exit").addEventListener("click", onButtonClick);
 }
 
-playGame();
+function gameEndCheck() {
+  if (playerScore === 10) {
+    console.log(
+      `You are the winner! Your final score is: ${playerScore}, and the computer had ${computerScore}.`,
+    );
+    document.getElementById("rockBtn").disabled = true;
+    document.getElementById("paperBtn").disabled = true;
+    document.getElementById("scissorsBtn").disabled = true;
+    computerScore = 0;
+    playerScore = 0;
+    gameCount = 1;
+  }
+  if (computerScore === 10) {
+    console.log(
+      `You lost! Your final score is: ${playerScore}, and the computer had ${computerScore}.`,
+    );
+    document.getElementById("rockBtn").disabled = true;
+    document.getElementById("paperBtn").disabled = true;
+    document.getElementById("scissorsBtn").disabled = true;
+    playerScore = 0;
+    computerScore = 0;
+    gameCount = 1;
+  }
+}
