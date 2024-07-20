@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>RPS Practice</title>
-        <script src="rockPaperScissors.js" defer></script>
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPS Practice</title>
+</head>
 
-    <body>
+<body>
+    <button class="selectionBtn" id="rockBtn">Rock</button>
+    <button class="selectionBtn" id="paperBtn">Paper</button>
+    <button class="selectionBtn" id="scissorsBtn">Scissors</button>
+    <button class="selectionBtn" id="Exit">Exit</button>
 
-    </body>
+    <div id="gameInfo">
+        <p id="roundNumber">Round: 1</p>
+        <p id="playerChoice">Your choice: </p>
+        <p id="computerChoice">Computer's choice: </p>
+        <p id="result">Result: </p>
+        <p id="score">Score - You: 0, Computer: 0</p>
+    </div>
+
+    <script src="rockPaperScissors.js"></script>
+</body>
 
 </html>

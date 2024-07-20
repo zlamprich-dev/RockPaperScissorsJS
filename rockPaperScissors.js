@@ -1,6 +1,3 @@
-console.log("TEST TEST TEST");
-console.log("-".repeat(30));
-
 let playerScore = 0;
 let computerScore = 0;
 let gameCount = 1;
@@ -22,8 +19,7 @@ function onButtonClick(event) {
   } else if (buttonId === "Exit") {
     return;
   }
-  console.clear();
-  console.log(`The current round is: ${gameCount}`);
+  updateRoundNumber(gameCount);
   return gameLogic(playerSelect, getComputerChoice());
 }
 
@@ -34,8 +30,8 @@ function getComputerChoice() {
 }
 
 function gameLogic(playerChoice, computerChoice) {
-  console.log(`You play ${playerChoice}`);
-  console.log(`The computer plays ${computerChoice}`);
+  updatePlayerChoice(playerChoice);
+  updateComputerChoice(computerChoice);
 
   let result;
 
@@ -54,10 +50,31 @@ function gameLogic(playerChoice, computerChoice) {
     result = "You win this round!";
     gameEndCheck();
   }
-  console.log(result);
-  console.log(
-    `The current score is PC: ${computerScore} - You: ${playerScore}`,
-  );
+  updateResult(result);
+  updateScore(playerScore, computerScore);
+}
+
+function updateRoundNumber(round) {
+  document.getElementById("roundNumber").textContent = `Round: ${round}`;
+}
+
+function updatePlayerChoice(choice) {
+  document.getElementById("playerChoice").textContent =
+    `Your choice: ${choice}`;
+}
+
+function updateComputerChoice(choice) {
+  document.getElementById("computerChoice").textContent =
+    `Computer's choice: ${choice}`;
+}
+
+function updateResult(result) {
+  document.getElementById("result").textContent = `Result: ${result}`;
+}
+
+function updateScore(playerScore, computerScore) {
+  document.getElementById("score").textContent =
+    `Score - You: ${playerScore}, Computer: ${computerScore}`;
 }
 
 // Adding event listeners to buttons
@@ -70,25 +87,37 @@ if (document.getElementById("Exit")) {
 
 function gameEndCheck() {
   if (playerScore === 10) {
-    console.log(
+    updateResult(
       `You are the winner! Your final score is: ${playerScore}, and the computer had ${computerScore}.`,
     );
-    document.getElementById("rockBtn").disabled = true;
-    document.getElementById("paperBtn").disabled = true;
-    document.getElementById("scissorsBtn").disabled = true;
-    computerScore = 0;
-    playerScore = 0;
-    gameCount = 1;
+    disableButtons();
+    resetScores();
+    setTimeout(enableButtons, 1500);
   }
   if (computerScore === 10) {
-    console.log(
+    updateResult(
       `You lost! Your final score is: ${playerScore}, and the computer had ${computerScore}.`,
     );
-    document.getElementById("rockBtn").disabled = true;
-    document.getElementById("paperBtn").disabled = true;
-    document.getElementById("scissorsBtn").disabled = true;
-    playerScore = 0;
-    computerScore = 0;
-    gameCount = 1;
+    disableButtons();
+    resetScores();
+    setTimeout(enableButtons, 1500);
   }
+}
+
+function disableButtons() {
+  document.getElementById("rockBtn").disabled = true;
+  document.getElementById("paperBtn").disabled = true;
+  document.getElementById("scissorsBtn").disabled = true;
+}
+
+function enableButtons() {
+  document.getElementById("rockBtn").disabled = false;
+  document.getElementById("paperBtn").disabled = false;
+  document.getElementById("scissorsBtn").disabled = false;
+}
+
+function resetScores() {
+  playerScore = 0;
+  computerScore = 0;
+  gameCount = 1;
 }
